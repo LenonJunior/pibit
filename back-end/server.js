@@ -1,17 +1,23 @@
 const express = require('express');
+const cors = require('cors'); 
+const path = require('path');
 const app = express();
 const port = 5000;
 
-// Middleware para habilitar o uso de JSON no corpo das requisições
+// Middleware para habilitar o uso de JSON no corpo das requisições e habilitar o CORS
 app.use(express.json());
+app.use(cors());
 
 // Array para simular um banco de dados de carros
 let carros = [];
 
-// Rota inicial para verificar se o servidor está rodando
+// Rota para servir o arquivo index.html
 app.get('/', (req, res) => {
-  res.send('Servidor do Lava-Jato está rodando!');
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'index.html'));
 });
+
+// Rota para servir arquivos estáticos (como o service worker e o manifesto)
+app.use('/front-end', express.static(path.join(__dirname, '..', 'front-end')));
 
 // Rota POST para cadastrar um novo carro (entrada)
 app.post('/carros', (req, res) => {
